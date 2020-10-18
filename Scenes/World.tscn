@@ -12,8 +12,11 @@ extents = Vector2( 500, 10 )
 position = Vector2( -849.187, -158.75 )
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
+modulate = Color( 0, 0, 0, 1 )
 position = Vector2( -123.863, 167.28 )
 scale = Vector2( 0.349289, 11.692 )
+collision_layer = 5
+collision_mask = 5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
 shape = SubResource( 1 )
@@ -23,8 +26,11 @@ scale = Vector2( 15.62, -0.308851 )
 texture = ExtResource( 1 )
 
 [node name="StaticBody2D2" type="StaticBody2D" parent="."]
+modulate = Color( 0, 0, 0, 1 )
 position = Vector2( -328.863, 75.2796 )
 scale = Vector2( 0.306821, 10.1946 )
+collision_layer = 5
+collision_mask = 5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2"]
 shape = SubResource( 1 )
@@ -34,9 +40,12 @@ scale = Vector2( 15.62, -0.308851 )
 texture = ExtResource( 1 )
 
 [node name="StaticBody2D3" type="StaticBody2D" parent="."]
+modulate = Color( 0, 0, 0, 1 )
 position = Vector2( 100.137, 127.28 )
 rotation = -0.276706
 scale = Vector2( 0.348594, 11.8196 )
+collision_layer = 5
+collision_mask = 5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D3"]
 shape = SubResource( 1 )
@@ -46,9 +55,12 @@ scale = Vector2( 15.62, -0.308851 )
 texture = ExtResource( 1 )
 
 [node name="StaticBody2D4" type="StaticBody2D" parent="."]
+modulate = Color( 0, 0, 0, 1 )
 position = Vector2( 286.194, -319.761 )
 rotation = -0.0164714
 scale = Vector2( 0.101622, -52.9406 )
+collision_layer = 5
+collision_mask = 5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D4"]
 shape = SubResource( 1 )
@@ -58,9 +70,12 @@ scale = Vector2( 15.62, -0.308851 )
 texture = ExtResource( 1 )
 
 [node name="StaticBody2D5" type="StaticBody2D" parent="."]
+modulate = Color( 0, 0, 0, 1 )
 position = Vector2( -283.797, -510.464 )
 rotation = -0.0164714
 scale = Vector2( 0.666302, -4.9164 )
+collision_layer = 5
+collision_mask = 5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D5"]
 shape = SubResource( 1 )
@@ -70,9 +85,12 @@ scale = Vector2( 15.62, -0.308851 )
 texture = ExtResource( 1 )
 
 [node name="StaticBody2D6" type="StaticBody2D" parent="."]
+modulate = Color( 0, 0, 0, 1 )
 position = Vector2( -688.512, -249.837 )
 rotation = -0.556114
 scale = Vector2( 0.100669, -41.4995 )
+collision_layer = 5
+collision_mask = 5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D6"]
 shape = SubResource( 1 )
@@ -82,14 +100,14 @@ scale = Vector2( 15.62, -0.308851 )
 texture = ExtResource( 1 )
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
-position = Vector2( 1055.81, -194.028 )
+position = Vector2( -236.962, -165.951 )
 scale = Vector2( 1.15, 1.15 )
 speed = 3500
 leg_update_speed = 5.5
 leg_sens_length = 300.0
 
 [node name="EnemySoldier" parent="." instance=ExtResource( 3 )]
-position = Vector2( 1263.3, -392.685 )
+position = Vector2( -316.642, -610.686 )
 
 [node name="GrabberBlock" parent="." instance=ExtResource( 4 )]
 position = Vector2( -420.474, -256.289 )

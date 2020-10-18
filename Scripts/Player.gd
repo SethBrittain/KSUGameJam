@@ -34,7 +34,7 @@ var use_second_front = false
 var use_second_back = false
 var use_left_top = false
 
-func _ready():
+func _ready(): #on ready, updates length of rays 
 	front_check.cast_to = Vector2(0,leg_sens_length)
 	back_check.cast_to = Vector2(0,leg_sens_length)
 	front_check2.cast_to = Vector2(leg_sens_length,0)
@@ -44,6 +44,7 @@ func _ready():
 	top_check.cast_to = Vector2(0,-leg_sens_length)
 	top_check2.cast_to = Vector2(0,-leg_sens_length)
 	
+	#updates rays for the initial movement
 	front_check.force_raycast_update()
 	back_check.force_raycast_update()
 	front_check2.force_raycast_update()
@@ -51,10 +52,12 @@ func _ready():
 	top_check.force_raycast_update()
 	top_check2.force_raycast_update()
 	
+	#attatches legs to nearby surfaces on initialization
 	for i in range(12):
 		step()
 
 func _physics_process(delta):
+	#general 2D movement
 	if Input.is_action_pressed("move_down"):
 		Velocity.y += speed * delta
 	if Input.is_action_pressed("move_up"):
@@ -63,24 +66,30 @@ func _physics_process(delta):
 		Velocity.x -= speed * delta
 	if Input.is_action_pressed("move_right"):
 		Velocity.x += speed * delta
-
+	
+	#drag for deceleration
 	Velocity *= drag
+	
+	#stops velocity from being tiny non-zero
 	if abs(Velocity.x) < 2:
 		Velocity.x = 0
 	if abs(Velocity.y) < 2:
 		Velocity.y = 0
-
+		
+	#stops diagonal movement being faster than horizontal
 	if Velocity.length() > MAX_SPEED:
 		Velocity = Velocity.normalized() * MAX_SPEED
-
+	
+	#moves player based on velocity
 	Velocity = move_and_slide(Velocity, Vector2(0,-1))
 	
-func _process(delta):
-	print(global_position)
+func _process(delta): #updates the legs end position occasionaly
+	$CanvasLayer/Label.text = str(global_position)
 	time_since_last_step += delta*leg_update_speed
 	if time_since_last_step >= step_rate:
 		time_since_last_step = 0
 		step()
+	self.look_at(get_global_mouse_position())
 
 func step():
 	var leg = null

@@ -6,10 +6,11 @@
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 16, 48 )
 
-[node name="EnemySoldier" type="Area2D"]
+[node name="EnemySoldier" type="KinematicBody2D"]
 script = ExtResource( 1 )
+speed = 8000
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="EnemyCollision" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )
 
 [node name="SoldierSprite" type="Sprite" parent="."]
@@ -26,3 +27,49 @@ position = Vector2( 40.386, 0 )
 [node name="Sprite" type="Sprite" parent="Hand/Muzzle"]
 scale = Vector2( 0.2, 0.2 )
 texture = ExtResource( 2 )
+
+[node name="WallDetectorLeft" type="RayCast2D" parent="."]
+position = Vector2( -16, 32 )
+enabled = true
+cast_to = Vector2( -50, 0 )
+
+[node name="WallDetectorRight" type="RayCast2D" parent="."]
+position = Vector2( 16, 32 )
+enabled = true
+cast_to = Vector2( 50, 0 )
+
+[node name="FloorDetectorLeft" type="RayCast2D" parent="."]
+position = Vector2( -16, 48 )
+enabled = true
+collision_mask = 4
+
+[node name="FloorDetectorRight" type="RayCast2D" parent="."]
+position = Vector2( 16, 48 )
+enabled = true
+collision_mask = 4
+
+[node name="DetectionCone" type="Area2D" parent="."]
+position = Vector2( 16, -24 )
+
+[node name="DetectionConePolygon" type="CollisionPolygon2D" parent="DetectionCone"]
+polygon = PoolVector2Array( 1200, -400, 1200, 400, 0, 0 )
+
+[node name="DetectionCone2" type="Area2D" parent="."]
+position = Vector2( -16, -24 )
+
+[node name="DetectionConePolygon" type="CollisionPolygon2D" parent="DetectionCone2"]
+polygon = PoolVector2Array( -1200, -400, -1200, 400, 0, 0 )
+
+[node name="AlertTimer" type="Timer" parent="."]
+wait_time = 10.0
+one_shot = true
+
+[node name="ShootTimer" type="Timer" parent="."]
+wait_time = 0.4
+one_shot = true
+[connection signal="body_entered" from="DetectionCone" to="." method="_on_DetectionCone_body_entered"]
+[connection signal="body_exited" from="DetectionCone" to="." method="_on_DetectionCone_body_exited"]
+[connection signal="body_entered" from="DetectionCone2" to="." method="_on_DetectionCone2_body_entered"]
+[connection signal="body_exited" from="DetectionCone2" to="." method="_on_DetectionCone2_body_exited"]
+[connection signal="timeout" from="AlertTimer" to="." method="_on_AlertTimer_timeout"]
+[connection signal="timeout" from="ShootTimer" to="." method="_on_ShootTimer_timeout"]
