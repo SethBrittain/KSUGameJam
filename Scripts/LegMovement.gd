@@ -56,6 +56,9 @@ func step(g_pos):
 	start_pos = end_pos
 	int_pos = Vector2(mid, height - step_height)
 	step_time = 0.0
+	get_parent().get_parent().get_parent().get_node("Gross").pitch_scale = rand_range(0.85,1.15)
+	if !get_parent().get_parent().get_parent().get_node("Gross").playing:
+		get_parent().get_parent().get_parent().get_node("Gross").play()
 
 func update_ik(targ_pos):
 	var offset = targ_pos - global_position

@@ -1,10 +1,16 @@
 extends KinematicBody2D
 
+var b = preload("res://Scenes/PlayerBullet.tscn")
+var health = 500
+var shot_count = 0
+
 const MAX_SPEED = 1200
 export (int) var speed
 var Velocity = Vector2()
 export (float) var drag
 export (float) var leg_update_speed
+
+onready var bullet_ind = $Bullets.get_children()
 
 onready var front_check = $Sensors/FrontCheck
 onready var back_check = $Sensors/BackCheck
@@ -57,6 +63,16 @@ func _ready(): #on ready, updates length of rays
 		step()
 
 func _physics_process(delta):
+	if Input.is_action_just_pressed("fire") and shot_count > 0:
+		shoot()
+		bullet_ind[shot_count].visible = false
+		shot_count -= 1
+	
+	if get_global_mouse_position().x < global_position.x:
+		$PlayerSprite.flip_v = true
+	else:
+		$PlayerSprite.flip_v = false
+	
 	#general 2D movement
 	if Input.is_action_pressed("move_down"):
 		Velocity.y += speed * delta
@@ -84,7 +100,9 @@ func _physics_process(delta):
 	Velocity = move_and_slide(Velocity, Vector2(0,-1))
 	
 func _process(delta): #updates the legs end position occasionaly
-	$CanvasLayer/Label.text = str(global_position)
+	$Bullets.get_children()
+	$CanvasLayer/Control/Label.text = str(health) + " " + str(shot_count)
+	$CanvasLayer/Control/Health.margin_right = 40 + health
 	time_since_last_step += delta*leg_update_speed
 	if time_since_last_step >= step_rate:
 		time_since_last_step = 0
@@ -140,3 +158,10 @@ func step():
 		
 	target = sensor.get_collision_point()
 	leg.step(target)
+
+func shoot():
+	var B = b.instance()
+	B.target_position = get_global_mouse_position()
+	B.global_position = global_position
+	B.start_pos = global_position
+	get_parent().add_child(B)

@@ -1,7 +1,7 @@
 extends KinematicBody2D
 
 var b = preload("res://Scenes/Bullet.tscn")
-onready var player = get_parent().get_node("Player")
+onready var player = get_parent().get_parent().get_node("Player")
 export (int) var speed
 var states = ["idle","alert","engaging"]
 var state
@@ -39,6 +39,12 @@ func _process(delta):
 		if !$FloorDetectorLeft.is_colliding():
 			speed = -speed
 			self.global_position.x += 1
+		if !$WallDetectorRight.is_colliding():
+			speed = -speed
+			self.global_position.x += 5
+		if !$WallDetectorLeft.is_colliding():
+			speed = -speed
+			self.global_position.x -= 5
 		
 		if can_see_player and player_in_cone:
 			state = states[1]
@@ -51,14 +57,14 @@ func _process(delta):
 		$Hand.look_at(player.global_position)
 		
 func shoot(target_position):
+	$Gunshot.pitch_scale = rand_range(0.85,1.15)
+	$Gunshot.play()
 	var B = b.instance()
 	B.target_position = target_position
 	B.global_position = $Hand/Muzzle.global_position
 	B.start_pos = $Hand/Muzzle.global_position
-	B.target_position = get_parent().get_node("Player").global_position
+	B.target_position = player.global_position
 	get_parent().add_child(B)
-	
-
 
 func _on_DetectionCone_body_entered(body):
 	if body.name == "Player":
@@ -82,3 +88,11 @@ func _on_AlertTimer_timeout():
 
 func _on_ShootTimer_timeout():
 	shoot($PlayerLOS.get_collision_point())
+
+
+func _on_RockTimer_timeout():
+	if abs(Velocity.x) > 1:
+		$SoldierSprite.rotation_degrees = rand_range(-20,20)
+	else:
+		$SoldierSprite.rotation_degrees = 0
+	

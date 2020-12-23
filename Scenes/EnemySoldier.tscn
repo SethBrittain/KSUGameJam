@@ -1,7 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Scripts/EnemySoldier.gd" type="Script" id=1]
 [ext_resource path="res://Sprites/icon.png" type="Texture" id=2]
+[ext_resource path="res://Sprites/pixel-32x64.png" type="Texture" id=3]
+[ext_resource path="res://Sounds/Gunshot.wav" type="AudioStream" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 16, 48 )
@@ -14,6 +16,8 @@ speed = 8000
 shape = SubResource( 1 )
 
 [node name="SoldierSprite" type="Sprite" parent="."]
+scale = Vector2( 1.4971, 1.4971 )
+texture = ExtResource( 3 )
 
 [node name="PlayerLOS" type="RayCast2D" parent="."]
 enabled = true
@@ -29,12 +33,12 @@ scale = Vector2( 0.2, 0.2 )
 texture = ExtResource( 2 )
 
 [node name="WallDetectorLeft" type="RayCast2D" parent="."]
-position = Vector2( -16, 32 )
+position = Vector2( -24, -32 )
 enabled = true
 cast_to = Vector2( -50, 0 )
 
 [node name="WallDetectorRight" type="RayCast2D" parent="."]
-position = Vector2( 16, 32 )
+position = Vector2( 24, -32 )
 enabled = true
 cast_to = Vector2( 50, 0 )
 
@@ -50,12 +54,14 @@ collision_mask = 4
 
 [node name="DetectionCone" type="Area2D" parent="."]
 position = Vector2( 16, -24 )
+scale = Vector2( 0.770152, 1.82025 )
 
 [node name="DetectionConePolygon" type="CollisionPolygon2D" parent="DetectionCone"]
 polygon = PoolVector2Array( 1200, -400, 1200, 400, 0, 0 )
 
 [node name="DetectionCone2" type="Area2D" parent="."]
 position = Vector2( -16, -24 )
+scale = Vector2( 0.689164, 1.94179 )
 
 [node name="DetectionConePolygon" type="CollisionPolygon2D" parent="DetectionCone2"]
 polygon = PoolVector2Array( -1200, -400, -1200, 400, 0, 0 )
@@ -67,9 +73,17 @@ one_shot = true
 [node name="ShootTimer" type="Timer" parent="."]
 wait_time = 0.4
 one_shot = true
+
+[node name="RockTimer" type="Timer" parent="."]
+wait_time = 0.25
+autostart = true
+
+[node name="Gunshot" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 4 )
 [connection signal="body_entered" from="DetectionCone" to="." method="_on_DetectionCone_body_entered"]
 [connection signal="body_exited" from="DetectionCone" to="." method="_on_DetectionCone_body_exited"]
 [connection signal="body_entered" from="DetectionCone2" to="." method="_on_DetectionCone2_body_entered"]
 [connection signal="body_exited" from="DetectionCone2" to="." method="_on_DetectionCone2_body_exited"]
 [connection signal="timeout" from="AlertTimer" to="." method="_on_AlertTimer_timeout"]
 [connection signal="timeout" from="ShootTimer" to="." method="_on_ShootTimer_timeout"]
+[connection signal="timeout" from="RockTimer" to="." method="_on_RockTimer_timeout"]

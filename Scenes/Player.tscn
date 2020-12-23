@@ -1,17 +1,60 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=13 format=2]
 
-[ext_resource path="res://Sprites/icon.png" type="Texture" id=1]
+[ext_resource path="res://Sprites/pixel-64x64.png" type="Texture" id=1]
 [ext_resource path="res://Scripts/Player.gd" type="Script" id=2]
 [ext_resource path="res://Scenes/Leg.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Sprites/bullet.png" type="Texture" id=4]
+[ext_resource path="res://Sprites/pixel-1x1.png" type="Texture" id=5]
+[ext_resource path="res://Sounds/gross.wav" type="AudioStream" id=6]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 32.0
+
+[sub_resource type="Curve" id=2]
+min_value = -1.0
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 1 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=3]
+curve = SubResource( 2 )
+
+[sub_resource type="Curve" id=4]
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 1 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=5]
+curve = SubResource( 4 )
+
+[sub_resource type="ParticlesMaterial" id=6]
+lifetime_randomness = 0.08
+trail_size_modifier = SubResource( 5 )
+flag_disable_z = true
+direction = Vector3( 0, 0, 0 )
+spread = 180.0
+gravity = Vector3( 0, 200, 0 )
+initial_velocity = 65.0
+initial_velocity_random = 0.28
+angular_velocity = 198.62
+angular_velocity_random = 1.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+linear_accel = 100.0
+linear_accel_random = 1.0
+angle_random = 0.62
+scale = 3.0
+color = Color( 1, 0, 0, 1 )
+hue_variation_curve = SubResource( 3 )
 
 [node name="Player" type="KinematicBody2D"]
 script = ExtResource( 2 )
 speed = 2850
 drag = 0.89
 leg_update_speed = 5.0
+leg_sens_length = 250.0
+
+[node name="BG" type="Sprite" parent="."]
+modulate = Color( 0.0431373, 0.0431373, 0.0431373, 1 )
+scale = Vector2( 17612.4, -12794 )
+z_index = -4096
+texture = ExtResource( 5 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true
@@ -55,6 +98,7 @@ position = Vector2( -32, -3.8147e-06 )
 flipped = false
 
 [node name="LegNode5" type="Node2D" parent="Legs"]
+visible = false
 
 [node name="Leg" parent="Legs/LegNode5" instance=ExtResource( 3 )]
 position = Vector2( -32, -24 )
@@ -63,6 +107,7 @@ position = Vector2( -32, -24 )
 position = Vector2( -22, -32 )
 
 [node name="LegNode6" type="Node2D" parent="Legs"]
+visible = false
 
 [node name="Leg" parent="Legs/LegNode6" instance=ExtResource( 3 )]
 position = Vector2( 32, -24 )
@@ -118,9 +163,119 @@ shape = SubResource( 1 )
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="Label" type="Label" parent="CanvasLayer"]
+[node name="Control" type="Control" parent="CanvasLayer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="CanvasLayer/Control"]
+visible = false
 margin_right = 40.0
 margin_bottom = 14.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="HealthBG" type="ColorRect" parent="CanvasLayer/Control"]
+margin_left = 35.0
+margin_top = 35.0
+margin_right = 545.0
+margin_bottom = 85.0
+color = Color( 0.631373, 0.631373, 0.631373, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Health" type="ColorRect" parent="CanvasLayer/Control"]
+margin_left = 40.0
+margin_top = 40.0
+margin_right = 40.0
+margin_bottom = 80.0
+color = Color( 1, 0, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bullets" type="Node2D" parent="."]
+
+[node name="Sprite" type="Sprite" parent="Bullets"]
+visible = false
+modulate = Color( 1, 0.0745098, 0.0745098, 1 )
+position = Vector2( -16, -18 )
+rotation = 0.261799
+scale = Vector2( 2.0318, 2.0318 )
+texture = ExtResource( 4 )
+
+[node name="Sprite2" type="Sprite" parent="Bullets"]
+visible = false
+modulate = Color( 1, 0.0745098, 0.0745098, 1 )
+position = Vector2( 8, -18 )
+rotation = -0.523598
+scale = Vector2( 2.0318, 2.0318 )
+texture = ExtResource( 4 )
+
+[node name="Sprite3" type="Sprite" parent="Bullets"]
+visible = false
+modulate = Color( 1, 0.0745098, 0.0745098, 1 )
+position = Vector2( -8, 8 )
+rotation = -1.0472
+scale = Vector2( 2.0318, 2.0318 )
+texture = ExtResource( 4 )
+
+[node name="Sprite4" type="Sprite" parent="Bullets"]
+visible = false
+modulate = Color( 1, 0.0745098, 0.0745098, 1 )
+position = Vector2( -24, -3.8147e-06 )
+rotation = -0.523598
+scale = Vector2( 2.0318, 2.0318 )
+texture = ExtResource( 4 )
+
+[node name="Sprite5" type="Sprite" parent="Bullets"]
+visible = false
+modulate = Color( 1, 0.0745098, 0.0745098, 1 )
+position = Vector2( 16, 16 )
+rotation = -0.261799
+scale = Vector2( 2.0318, 2.0318 )
+texture = ExtResource( 4 )
+
+[node name="Sprite6" type="Sprite" parent="Bullets"]
+visible = false
+modulate = Color( 1, 0.0745098, 0.0745098, 1 )
+position = Vector2( -16, 24 )
+rotation = 1.309
+scale = Vector2( 2.0318, 2.0318 )
+texture = ExtResource( 4 )
+
+[node name="Sprite7" type="Sprite" parent="Bullets"]
+visible = false
+modulate = Color( 1, 0.0745098, 0.0745098, 1 )
+position = Vector2( -3.8147e-06, 22 )
+rotation = -1.57079
+scale = Vector2( 2.0318, 2.0318 )
+texture = ExtResource( 4 )
+
+[node name="Sprite8" type="Sprite" parent="Bullets"]
+visible = false
+modulate = Color( 1, 0.0745098, 0.0745098, 1 )
+position = Vector2( 16, -3.8147e-06 )
+rotation = -0.261799
+scale = Vector2( 2.0318, 2.0318 )
+texture = ExtResource( 4 )
+
+[node name="Blood" type="Particles2D" parent="Bullets"]
+scale = Vector2( 2, 2 )
+emitting = false
+amount = 20
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+randomness = 1.0
+process_material = SubResource( 6 )
+texture = ExtResource( 5 )
+
+[node name="Gross" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 6 )
+autoplay = true
+attenuation = 3.03143
